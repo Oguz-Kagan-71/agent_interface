@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login Page</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #ffffff;
+                background-image: url('static/ikom.png');
+                background-size:95%;
+                background-position: center;
+                background-repeat: no-repeat;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+
+            h1 {
+                color: #333;
+                text-align: center;
+            }
+
+            form {
+                background: rgba(255, 255, 255, 0.9); /* Slightly transparent white background */
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                max-width: 400px;
+                width: 100%;
+                margin: 0 auto;
+            }
+            
+
+            label {
+                display: block;
+                margin-bottom: 10px;
+                color: #555;
+            }
+
+            input[type="text"],
+            input[type="password"] {
+                width: calc(100% - 20px);
+                padding: 10px;
+                margin-bottom: 20px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+
+            button {
+                background: #28a745;
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+            button:hover {
+                background: #218838;
+            }
+            .header-text {
+                position: absolute;
+                top: 20px;
+                text-align: center;
+                width: 100%;
+                font-size: 124px;
+                font-weight: bold;
+                color: #1b435c;
+                background: rgba(255, 255, 255); /* Slightly transparent background */
+                padding: 10px;                
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header-text">
+            AGENT DEMO 
+        </div>
+        <form method="post" action="/">
+            <h1>Login</h1>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required />
+        
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required />
+        
+            <label for="mongoAddress">Select MongoDB Address:</label>
+            <select id="mongoAddress" name="mongoAddress">
+                <option value="uedas">uedas</option>
+                <option value="medas">medas</option>
+                <option value="bedas">bedas</option>
+            </select>
+        
+            <button type="submit">Login</button>
+        </form>
+        
+    </body>
+</html>

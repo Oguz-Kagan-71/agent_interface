@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Database Response</title>
+        <style>
+            input[type="text"] {
+                width: 100%;
+                box-sizing: border-box;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Database Response</h1>
+        <table id="data-table" border="1">
+            <thead>
+                <tr id="header-row"></tr>
+                <tr id="filter-row"></tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <script>
+            const queryBy = "{{ queryBy }}";
+            const queryValue = "{{ queryValue }}";
+            const collection = "{{ collection }}";
+            const queryLimit = "{{ queryLimit }}";
+
+            // Function to fetch and display data
+            function fetchData() {
+                fetch(
+                    `/modem/${collection}/${queryBy}/post/${queryValue}/${queryLimit}`,
+                    {
+                        method: "POST",
+                    }
+                )
+                    .then((response) => response.json())
+                    .then((data) => {
+                        console.log("Data fetched successfully:", data);
+                        const table = document.getElementById("data-table");
+                        const tbody = table.getElementsByTagName("tbody")[0];
+                        const headerRow = document.getElementById("header-row");
+                        const filterRow = document.getElementById("filter-row");
+
+                        // Clear existing table content
+                        tbody.innerHTML = "";
+                        headerRow.innerHTML = "";
+                        filterRow.innerHTML = "";
+
+                        if (data && data.data) {
+                            const firstRecord =
+                                data.data[Object.keys(data.data)[0]];
+                            const columns = Object.keys(firstRecord);
+
+                            // Create headers
+                            const indexHeaderCell =
+                                document.createElement("th");
+                            indexHeaderCell.textContent = "Index";
+                            headerRow.appendChild(indexHeaderCell);
+
+                            columns.forEach((col) => {
+                                const headerCell = document.createElement("th");
+                                headerCell.textContent = col;
+                                headerRow.appendChild(headerCell);
+                            });
+
+                            // Create filter inputs
+                            const indexFilterCell =
+                                document.createElement("th");
+                            indexFilterCell.innerHTML =
+                                '<input type="text" id="filterIndex" placeholder="Filter Index" />';
+                            filterRow.appendChild(indexFilterCell);
+
+                            columns.forEach((col) => {
+                                const filterCell = document.createElement("th");
+                                filterCell.innerHTML = `<input type="text" id="filter${col}" placeholder="Filter ${col}" />`;
+                                filterRow.appendChild(filterCell);
+                            });
+
+                            // Create table rows
+                            for (const key in data.data) {
+                                const row = tbody.insertRow();
+                                const indexCell = row.insertCell(0);
+                                indexCell.textContent = key;
+
+                                columns.forEach((col) => {
+                                    const cell = row.insertCell();
+                                    cell.textContent = data.data[key][col];
+                                });
+                            }
+
+                            // Add event listeners to filter inputs
+                            document
+                                .querySelectorAll("thead input")
+                                .forEach((input) => {
+                                    input.addEventListener(
+                                        "input",
+                                        filterTable
+                                    );
+                                });
+                        }
+                    })
+                    .catch((error) =>
+                        console.error("Error fetching data:", error)
+                    );
+            }
+
+            // Function to filter table rows
+            function filterTable() {
+                const filters = Array.from(
+                    document.querySelectorAll("thead input")
+                ).map((input) => input.value.toLowerCase());
+
+                const rows = document
+                    .getElementById("data-table")
+                    .getElementsByTagName("tbody")[0]
+                    .getElementsByTagName("tr");
+
+                for (const row of rows) {
+                    let showRow = true;
+                    for (let i = 0; i < filters.length; i++) {
+                        const cell = row.getElementsByTagName("td")[i];
+                        if (
+                            cell &&
+                            cell.textContent
+                                .toLowerCase()
+                                .indexOf(filters[i]) === -1
+                        ) {
+                            showRow = false;
+                            break;
+                        }
+                    }
+                    row.style.display = showRow ? "" : "none";
+                }
+            }
+
+            // Fetch data on page load
+            window.onload = fetchData;
+        </script>
+    </body>
+</html>

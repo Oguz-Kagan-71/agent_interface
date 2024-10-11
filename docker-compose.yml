@@ -1,0 +1,16 @@
+# docker-compose.yml
+version: '3.9.6'
+
+services:
+  flask:
+    build: .
+    ports:
+      - "8000:8000"
+  
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - flask

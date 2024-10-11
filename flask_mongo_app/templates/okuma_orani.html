@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okuma Oranı</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Canvas boyutunu sabit tutmak için */
+        #myChart {
+            width: 400px !important;  /* Genişlik */
+            height: 400px !important; /* Yükseklik */
+        }
+    </style>
+</head>
+<body>
+    <h1>Okuma Oranı</h1>
+    <canvas id="myChart"></canvas>
+    <script>
+        var averageRate = {{ average_rate }}; // Python'dan alınan okuma oranı
+        var ctx = document.getElementById('myChart').getContext('2d');
+
+        // Eğer sadece bir oran varsa, bu durumda grafiği oluştur
+        if (averageRate !== null && !isNaN(averageRate)) {
+            var myChart = new Chart(ctx, {
+                type: 'doughnut', // Grafik tipi
+                data: {
+                    labels: ['Okuma Oranı'],
+                    datasets: [{
+                        label: 'Oran',
+                        data: [averageRate], // Veriyi ekliyoruz
+                        backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+                        borderColor: ['rgba(255, 99, 132, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: false, // Boyutların değişmesini engelle
+                    maintainAspectRatio: false // Oranı korumayı engelle
+                }
+            });
+        } else {
+            // Eğer averageRate geçerli bir değer değilse, bir mesaj göster
+            document.body.innerHTML += "<p>Veri yok veya geçersiz!</p>";
+        }
+    </script>
+</body>
+</html>
